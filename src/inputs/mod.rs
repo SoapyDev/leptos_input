@@ -1,4 +1,3 @@
-pub mod text_inputs;
+mod text;
 
-
-pub use text_inputs::InputTextState;
+pub use text::{InputTextOutline, InputTextUnderline};

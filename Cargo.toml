@@ -4,4 +4,19 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-leptos = { version = "0.6.14", features = ["csr", "nightly"] }
+leptos = { version = "0.6" }
+leptos_axum = { version = "0.6", optional = true}
+leptos_meta = { version = "0.6" }
+leptos_router = { version = "0.6" }
+wasm-bindgen = "0.2"
+leptos-use = "0.13"
+
+[features]
+hydrate = ["leptos/hydrate", "leptos_meta/hydrate", "leptos_router/hydrate"]
+ssr = [
+    "dep:leptos_axum",
+    "leptos/ssr",
+    "leptos_meta/ssr",
+    "leptos_router/ssr",
+    "leptos-use/ssr"
+]
