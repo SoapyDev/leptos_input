@@ -21,6 +21,8 @@ chrono = "0.4"
 uuid = { version = "1.10", features = ["v4", "fast-rng"]}
 validator = { version = "0.18.1", features = ["derive"] }
 leptos-use = { version = "0.13", features = ["use_css_var"] }
+csscolorparser = { version = "0.7.0", default-features = false }
+codee = { version = "0.2.0" }
 
 [features]
 csr = ["leptos/csr"]
