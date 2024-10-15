@@ -1,0 +1,21 @@
+[package]
+publish = false
+name = "demo"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+leptos-inputs = { path = "../inputs" }
+leptos = { workspace = true }
+leptos_meta = { workspace = true }
+leptos_router = { workspace = true }
+icondata = { version = "0.4.0" }
+chrono = "0.4"
+uuid = { version = "1.10", features = ["v4"] }
+
+[features]
+default = ["csr"]
+tracing = ["leptos/tracing"]
+csr = ["leptos/csr"]
+ssr = ["leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr"]
+hydrate = ["leptos/hydrate"]
