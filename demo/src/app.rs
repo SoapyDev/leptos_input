@@ -18,7 +18,7 @@ pub fn App() -> impl IntoView {
     let custom_validation = move |val: &str| !val.is_empty();
     let custom_message = String::from("A password cannot be empty");
     
-    let title = "Input Demo".to_string();
+    let title = Some("Input Demo".to_string());
     
     let suggestions = Some(
         vec![

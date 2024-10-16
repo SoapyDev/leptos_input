@@ -8,7 +8,7 @@ pub enum FormBoxStyle {
 #[component]
 pub fn FormBox(
     #[prop(default = FormBoxStyle::SimpleLogin)] style: FormBoxStyle,
-    #[prop(into, default = MaybeSignal::from(String::from("Login")))] title: MaybeSignal<String>,
+    #[prop(default = MaybeSignal::from(Some(String::from("Login"))))] title: MaybeSignal<Option<String>>,
     #[prop(into, optional)] logo_src: Option<MaybeSignal<String>>,
     #[prop(into, optional)] logo_alt: Option<MaybeSignal<String>>,
     #[prop(into, optional)] footer_content: Option<MaybeSignal<String>>,
