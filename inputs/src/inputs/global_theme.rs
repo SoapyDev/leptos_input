@@ -1,9 +1,10 @@
 use codee::string::FromToStringCodec;
 use csscolorparser::Color;
-use leptos::{component, provide_context, use_context, SignalSet};
+use leptos::{component, provide_context, use_context, SignalSet, SignalUpdate};
 use leptos::{view, Children, IntoView, RwSignal, SignalGet};
 use leptos_use::{use_cookie, use_css_var};
 use std::fmt::{Display, Formatter};
+use leptos::leptos_dom::logging::console_log;
 
 /// The selected theme of the application.
 #[derive(Clone, Debug, Copy,PartialEq)]
@@ -51,25 +52,25 @@ impl ThemeColor{
             Theme::Dark => self.dark.to_hex_string()
         }
     }
-    
+
     pub fn rgb(&self, theme: &Theme) -> String{
         match theme {
             Theme::Light => self.light.to_rgb_string(),
             Theme::Dark => self.dark.to_rgb_string()
         }
     }
-    
+
     pub fn hsla(&self, theme: &Theme) -> [f32; 4]{
         match theme {
              Theme::Light => self.light.to_hsla(),
              Theme::Dark => self.dark.to_hsla()
         }
     }
-    
+
     pub fn lighten(&self, theme: &Theme, amount: f32) -> String{
         let base = self.hsla(theme);
-        
-        Color::from_hsla(base[0], base[1], base[2], base[3] + amount)
+
+        Color::from_hsla(base[0], base[1], base[2] + amount, base[3])
             .to_hex_string()
     }
 }
@@ -97,7 +98,7 @@ pub struct Sizes{
 
 impl Display for Sizes{
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        
+
         write!(f, "{}{};", self.value, self.unit)
     }
 }
@@ -234,6 +235,8 @@ pub struct GlobalTheme {
     pub white: ThemeColor,
     pub black: ThemeColor,
     pub gray: ThemeColor,
+    pub text: ThemeColor,
+    pub text_hover: ThemeColor,
     pub background: ThemeColor,
     pub emphasis: ThemeColor,
     pub secondary: ThemeColor,
@@ -270,13 +273,21 @@ impl Default for GlobalTheme{
                 light: "#B1B1B1".parse().unwrap(),
                 dark: "#B1B1B1".parse().unwrap()
             },
+            text: ThemeColor{
+                light: "#121212".parse().unwrap(),
+                dark: "#E1E1E1".parse().unwrap()
+            },
+            text_hover: ThemeColor{
+                light: "#E1E1E1".parse().unwrap(),
+                dark: "#121212".parse().unwrap()
+            },
             background: ThemeColor{
-                light: "#CCCCCC".parse().unwrap(),
-                dark: "#151515".parse().unwrap()
+                light: "#D1D1D1".parse().unwrap(),
+                dark: "#181818".parse().unwrap()
             },
             emphasis: ThemeColor{
                 light: "#9457e1".parse().unwrap(),
-                dark: "#9457e1".parse().unwrap()
+                dark: "#8544d9".parse().unwrap()
             },
             secondary: ThemeColor{
                 light: "#15b6a6".parse().unwrap(),
@@ -320,6 +331,8 @@ impl GlobalTheme {
         let (_, set_white) = use_css_var("--white");
         let (_, set_black) = use_css_var("--black");
         let (_, set_gray) = use_css_var("--gray");
+        let (_, set_text) = use_css_var("--text");
+        let (_, set_text_hover) = use_css_var("--text-hover");
 
         let (_, set_background) = use_css_var("--dp-0");
         let (_, set_dp_1) = use_css_var("--dp-1");
@@ -331,7 +344,7 @@ impl GlobalTheme {
         let (_, set_dp_12) = use_css_var("--dp-12");
         let (_, set_dp_16) = use_css_var("--dp-16");
         let (_, set_dp_24) = use_css_var("--dp-24");
-        
+
         let (_, set_emphasis) = use_css_var("--emphasis");
         let (_, set_emphasis_hover) = use_css_var("--emphasis-hover");
         let (_, set_secondary) = use_css_var("--secondary");
@@ -369,13 +382,15 @@ impl GlobalTheme {
         set_white.set(self.white.hex(&theme));
         set_black.set(self.black.hex(&theme));
         set_gray.set(self.gray.hex(&theme));
+        set_text.set(self.text.hex(&theme));
+        set_text_hover.set(self.text_hover.hex(&theme));
 
         let background = self.background.hex(&theme);
         set_background.set(background.to_owned());
-        
+
         set_emphasis.set(self.emphasis.hex(&theme));
         set_secondary.set(self.secondary.hex(&theme));
-        
+
         if theme == Theme::Light {
             set_dp_1.set(background.to_owned());
             set_dp_2.set(background.to_owned());
@@ -386,23 +401,23 @@ impl GlobalTheme {
             set_dp_12.set(background.to_owned());
             set_dp_16.set(background.to_owned());
             set_dp_24.set(background.to_owned());
-            set_emphasis_hover.set(self.emphasis.lighten(&theme, 10.0));
-            set_secondary_hover.set(self.secondary.lighten(&theme, 10.0));
+            set_emphasis_hover.set(self.emphasis.lighten(&theme, -0.1));
+            set_secondary_hover.set(self.secondary.lighten(&theme, -0.1));
         } else {
-            set_dp_1.set(self.background.lighten(&theme, 5.0));
-            set_dp_2.set(self.background.lighten(&theme, 7.0));
-            set_dp_3.set(self.background.lighten(&theme, 8.0));
-            set_dp_4.set(self.background.lighten(&theme, 9.0));
-            set_dp_6.set(self.background.lighten(&theme, 11.0));
-            set_dp_8.set(self.background.lighten(&theme, 12.0));
-            set_dp_12.set(self.background.lighten(&theme, 14.0));
-            set_dp_16.set(self.background.lighten(&theme, 15.0));
-            set_dp_24.set(self.background.lighten(&theme, 16.0));
-            set_emphasis_hover.set(self.emphasis.lighten(&theme, -10.0));
-            set_secondary_hover.set(self.secondary.lighten(&theme, -10.0));
+            set_dp_1.set(self.background.lighten(&theme, 0.05));
+            set_dp_2.set(self.background.lighten(&theme, 0.07));
+            set_dp_3.set(self.background.lighten(&theme, 0.08));
+            set_dp_4.set(self.background.lighten(&theme, 0.09));
+            set_dp_6.set(self.background.lighten(&theme, 0.11));
+            set_dp_8.set(self.background.lighten(&theme, 0.12));
+            set_dp_12.set(self.background.lighten(&theme, 0.14));
+            set_dp_16.set(self.background.lighten(&theme, 0.15));
+            set_dp_24.set(self.background.lighten(&theme, 0.16));
+            set_emphasis_hover.set(self.emphasis.lighten(&theme, 0.1));
+            set_secondary_hover.set(self.secondary.lighten(&theme, 0.1));
         }
-        
-        
+
+
 
         set_shadow_small.set(self.shadow_small.shadow(&theme));
         set_shadow_medium.set(self.shadow_medium.shadow(&theme));
@@ -417,66 +432,56 @@ impl GlobalTheme {
         set_font_size_medium.set(self.fonts.medium.to_string());
         set_font_size_large.set(self.fonts.large.to_string());
         set_font_size_x_large.set(self.fonts.very_large.to_string());
-        
+
         set_spacing_small.set(self.spacing.small.to_string());
         set_spacing_medium.set(self.spacing.medium.to_string());
         set_spacing_large.set(self.spacing.large.to_string());
-        
+
         set_radius_input.set(self.radius.input_radius.to_string());
         set_radius_box.set(self.radius.box_radius.to_string());
-        
+
         set_breakpoint_small.set(self.breakpoints.small_form.to_string());
         set_breakpoint_medium.set(self.breakpoints.mobile.to_string());
         set_breakpoint_large.set(self.breakpoints.tablet.to_string());
         set_breakpoint_x_large.set(self.breakpoints.desktop.to_string());
+
+
     }
-    
+
     pub fn toggle(&mut self) {
-        self.theme = match self.theme {
+        let new_theme = match self.theme {
             Theme::Light => Theme::Dark,
             Theme::Dark => Theme::Light
         };
-        
+
         let (_, set_theme) = use_cookie::<String, FromToStringCodec>("theme_mode");
 
-        set_theme.set(Option::from(self.theme.to_string()));
+        set_theme.set(Option::from(new_theme.to_string()));
 
+        self.theme = new_theme;
         self.apply();
     }
-    
-}
 
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub enum ThemeToggleStyle {
-    Button,
-    Switch,
-    Text
 }
 
 #[component]
-pub fn ThemeToggler(
-    #[prop(default = ThemeToggleStyle::Button)] style: ThemeToggleStyle
-) -> impl IntoView {
+pub fn ThemeToggler() -> impl IntoView {
     let global_theme = use_context::<RwSignal<GlobalTheme>>().unwrap();
-    
-    if style == ThemeToggleStyle::Switch {
-        view!{
 
-        }.into_view()
-    }else {
-        // https://codepen.io/ghaste/pen/WNOjQJN
-        view!{
-            <button id="switch-theme" aria-label="Switch theme">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 472.39 472.39">
-                    <g class="toggle-sun">
-                        <path d="M403.21,167V69.18H305.38L236.2,0,167,69.18H69.18V167L0,236.2l69.18,69.18v97.83H167l69.18,69.18,69.18-69.18h97.83V305.38l69.18-69.18Zm-167,198.17a129,129,0,1,1,129-129A129,129,0,0,1,236.2,365.19Z" />
-                    </g>
-                    <g class="toggle-circle">
-                        <circle class="cls-1" cx="236.2" cy="236.2" r="103.78" />
-                    </g>
-                </svg>
-            </button>        
-        }.into_view()
+    // https://codepen.io/ghaste/pen/WNOjQJN
+    view!{
+        <button
+        on:click=move |_| global_theme.update(|t| t.toggle())
+        id="switch-theme" aria-label="Switch theme">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 472.39 472.39">
+                <g class="toggle-sun">
+                    <path d="M403.21,167V69.18H305.38L236.2,0,167,69.18H69.18V167L0,236.2l69.18,69.18v97.83H167l69.18,69.18,69.18-69.18h97.83V305.38l69.18-69.18Zm-167,198.17a129,129,0,1,1,129-129A129,129,0,0,1,236.2,365.19Z" />
+                </g>
+                <g class="toggle-circle">
+                    <circle class="cls-1" cx="236.2" cy="236.2" r="103.78" />
+                </g>
+            </svg>
+        </button>
     }
 }
 
@@ -485,12 +490,14 @@ pub fn GlobalThemeProvider(
     #[prop(default = RwSignal::new(GlobalTheme::default()))] global_theme: RwSignal<GlobalTheme>,
     children: Children,
 ) -> impl IntoView {
-    
+
+    global_theme.get().apply();
     provide_context(global_theme);
-    
+
     view! {
-        <body 
-            class:dark=global_theme.get().theme == Theme::Dark
+        <body
+            class:dark-theme=move || global_theme.get().theme == Theme::Dark
+            class:light-theme=move || global_theme.get().theme == Theme::Light
         >
             {children()}
         </body>

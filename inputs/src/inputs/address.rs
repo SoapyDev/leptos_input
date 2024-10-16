@@ -149,7 +149,11 @@ fn Suggestions(
                                         <button
                                             type="button"
                                             class="suggestion"
-                                            on:click=move |_| value.set(suggestion.clone())
+                                            on:click=move |_| {
+                                                value.set(suggestion.clone());
+                                                selected.set(i);
+                                            }
+                                            on:mouseenter=move |_| selected.set(i)
                                         >
                                             {val}
                                         </button>
