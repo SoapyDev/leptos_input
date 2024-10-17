@@ -191,6 +191,26 @@ body {
         width: 100%;
         background-color: var(--dp-1);
         border-radius: var(--radius-box);
+
+        .form-header{
+            color: var(--text);
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+
+            h2{
+                font-size: var(--font-size-large);
+                font-weight: 400;
+            }
+        }
+        .form-footer{
+            color: var(--text);
+            font-size: var(--font-size-small);
+            text-align: center;
+            padding-top: 1rem;
+        }
     }
 
     .form.simple-login{
@@ -316,7 +336,6 @@ body {
     .outline.invalid-input{
         border-color: var(--error);
     }
-
     .underline.valid-input{
         border-bottom-color: var(--success);
     }
@@ -347,7 +366,6 @@ body {
                 overflow-y: auto;
             }
 
-
             li{
                 border-bottom: 1px solid var(--gray);
 
@@ -356,7 +374,6 @@ body {
                     button{
                         color: var(--text-hover)
                     }
-
                 }
 
                 &.selected{
@@ -372,7 +389,6 @@ body {
                 &:last-child{
                     border-radius: 0 0 var(--radius-box) var(--radius-box);
                 }
-
             }
 
 
@@ -407,7 +423,130 @@ body {
         }
     }
 
+    button.button{
+        letter-spacing: .05rem;
+        position: relative;
+        overflow: hidden;
+        transition: .3s ease-in-out;
+        z-index: 1;
 
+        &:before{
+            content: "";
+            display: block;
+            position: absolute;
+            width: 200%;
+            height: 500%;
+            border-radius: 100%;
+            transition: .36s cubic-bezier(0.4, 0.0, 1, 1);
+        }
+
+        .outline{
+            background-color: inherit;
+            border: 2px solid transparent;
+
+            .primary{
+                color: var(--emphasis);
+                border-color: var(--emphasis);
+
+                &:hover, &:focus, &:focus-visible, &:focus-within{
+                    .push{}
+                    .fill{}
+                    .ribon{}
+                    .float{}
+                    .inner-shadow{}
+                }
+            }
+
+            .secondary{
+                color: var(--secondary);
+                border-color: var(--secondary);
+                &:hover, &:focus, &:focus-visible, &:focus-within{}
+            }
+
+            .error{
+                color: var(--error);
+                border-color: var(--error);
+                &:hover, &:focus, &:focus-visible, &:focus-within{}
+            }
+
+            .success{
+                color: var(--success);
+                border-color: var(--success);
+                &:hover, &:focus, &:focus-visible, &:focus-within{}
+            }
+        }
+
+        .solid, .rounded-solid{
+            .primary, .secondary, .error, .success{
+                background-color: var(--dp-0);
+                box-shadow: var(--shadow-medium);
+            }
+
+            .primary{
+                color: var(--emphasis);
+                &:before{
+                    background-color: var(--emphasis);
+                }
+
+            }
+            .secondary{
+                color: var(--secondary);
+                &:before{
+                    background-color: var(--secondary);
+                }
+            }
+            .error{
+                color: var(--error);
+                &:before{
+                    background-color: var(--error);
+                }
+            }
+            .success{
+                color: var(--success);
+                &:before{
+                    background-color: var(--success);
+                }
+            }
+        }
+        .success, .error, .secondary, .primary{
+            &:hover, &:focus, &:focus-visible, &:focus-within{
+                .push{
+                    box-shadow: var(--shadow-small);
+                    transform: scale(.95);
+                }
+                .fill{
+                    &:before{
+                        color: var(--white);
+                        transform: translate(-110%,-110%) translateZ(0);
+                    }
+                }
+                .float{
+                    box-shadow: var(--shadow-large);
+                    transform: scale(1.05);
+                }
+            }
+        }
+
+        .rounded-outline{
+            border-radius: var(--radius-input);
+        }
+        .rounded-solid{
+            border-radius: var(--radius-input);
+        }
+        .small{
+            padding: var(--spacing-small) var(--spacing-medium);
+        }
+        .medium{
+            padding: var(--spacing-medium) var(--spacing-large);
+        }
+        .large{
+            padding: var(--spacing-large) var(--spacing-xlarge);
+        }
+        .full{
+            width: 100%;
+            padding: var(--spacing-medium);
+        }
+    }
 }
 
 body.dark-theme {
@@ -418,8 +557,6 @@ body.dark-theme {
     input.input.outline{
         border-color: var(--dp-1);
         background-color: var(--dp-2);
-
-
 
         &:focus{
             border-color: var(--emphasis-hover);
@@ -465,7 +602,6 @@ body.dark-theme {
                     color: var(--text);
                 }
             }
-
         }
     }
 }

@@ -1,11 +1,11 @@
-use leptos_inputs::PasswordInputStyle;
+use leptos::*;
+use leptos_inputs::InputPassword;
 use leptos_inputs::PasswordValidationLevel;
 use leptos_inputs::{AddressInputStyle, InputAddress};
-use leptos_inputs::InputPassword;
-use leptos::*;
-use leptos_meta::{provide_meta_context};
-use leptos_inputs::{InputEmail, EmailInputStyle, InputText, TextInputStyle};
-use leptos_inputs::{GlobalThemeProvider, ThemeToggler, FormBox, FormBoxStyle};
+use leptos_inputs::{Button, ButtonAnimation, ButtonSize, ButtonStyle, ButtonColor, PasswordInputStyle};
+use leptos_inputs::{EmailInputStyle, InputEmail, InputText, TextInputStyle};
+use leptos_inputs::{FormBox, GlobalThemeProvider, ThemeToggler};
+use leptos_meta::provide_meta_context;
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -67,6 +67,26 @@ pub fn App() -> impl IntoView {
                     <InputAddress address=value style=AddressInputStyle::Rounded suggestions=suggestions.into()/>
                 </form>
             </FormBox>
+        
+
+            <div>
+                <Button text="Submit".to_string().into() /> 
+                <Button style=ButtonStyle::RoundedSolid />
+                <Button style=ButtonStyle::RoundedOutline />
+                <Button style=ButtonStyle::Solid />
+                <Button style=ButtonStyle::Outline />
+                <Button color=ButtonColor::Primary />
+                <Button color=ButtonColor::Secondary />
+                <Button color=ButtonColor::Error />
+                <Button color=ButtonColor::Success />
+                <Button size=ButtonSize::Small />
+                <Button size=ButtonSize::Medium />
+                <Button size=ButtonSize::Large />
+                <Button size=ButtonSize::FullSize />
+                <Button animation=ButtonAnimation::Push />
+                <Button animation=ButtonAnimation::Fill />
+                <Button animation=ButtonAnimation::Float />
+            </div>
             
         </GlobalThemeProvider>
     }
