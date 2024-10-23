@@ -5,6 +5,7 @@ mod address;
 mod global_theme;
 mod form;
 mod buttons;
+mod links;
 
 pub use text::{InputText, TextInputStyle};
 pub use email::{EmailInputStyle, InputEmail};
