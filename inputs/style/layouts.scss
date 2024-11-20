@@ -1,0 +1,116 @@
+.form {
+  box-shadow: var(--shadow-medium);
+  width: 100%;
+  background-color: var(--dp-1);
+  border-radius: var(--radius-box);
+
+  .form-header {
+    color: var(--text);
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    h2 {
+      font-size: var(--font-size-large);
+      font-weight: 400;
+    }
+  }
+
+  .form-footer {
+    color: var(--text);
+    font-size: var(--font-size-small);
+    text-align: center;
+    padding-top: 1rem;
+  }
+}
+
+.form.simple-login {
+  max-width: 800px;
+  min-width: 400px;
+  padding: var(--spacing-large);
+}
+
+
+.column {
+  display: flex;
+  flex-flow: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.row-reverse {
+  flex-direction: row-reverse;
+}
+
+.col-reverse {
+  flex-direction: column-reverse;
+}
+
+.no-wrap {
+  flex-wrap: nowrap;
+}
+
+.gap-small {
+  gap: var(--spacing-small);
+}
+
+.gap-medium {
+  gap: var(--spacing-medium);
+}
+
+.gap-large {
+  gap: var(--spacing-large);
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.align-center {
+  align-content: center;
+}
+
+.align-between {
+  align-content: space-between;
+}
+
+.align-around {
+  align-content: space-around;
+}
+
+.align-evenly {
+  align-content: space-evenly;
+}
+
+.align-start {
+  align-content: flex-start;
+}
+
+.align-end {
+  align-content: flex-end;
+}
