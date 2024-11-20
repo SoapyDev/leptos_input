@@ -1,21 +1,20 @@
-use leptos::*;
 use leptos::MaybeSignal;
+use leptos::*;
 use uuid::Uuid;
-use validator::{Validate};
+use validator::Validate;
 
 #[derive(Debug, Validate)]
-pub struct EmailInput{
+pub struct EmailInput {
     #[validate(email)]
-    pub(crate) email: String
+    pub(crate) email: String,
 }
 
 #[derive(PartialEq, Clone, Copy)]
 pub enum EmailInputStyle {
     Underline,
     Outline,
-    Rounded
+    Rounded,
 }
-
 
 /// An email input that will validate email based on HTML5 spec RFC 5322
 #[component]
@@ -23,13 +22,15 @@ pub fn InputEmail(
     /// The tracked value
     email: RwSignal<String>,
     /// Whether or not the input is required, defaults to `false`
-    #[prop(default = false)] required: bool,
+    #[prop(default = false)]
+    required: bool,
     /// Whether or not the input is disabled, defaults to `false`
-    #[prop(default = MaybeSignal::from(false))] disabled: MaybeSignal<bool>,
+    #[prop(default = MaybeSignal::from(false))]
+    disabled: MaybeSignal<bool>,
     /// The style of the input
-    #[prop(default = EmailInputStyle::Underline)] style: EmailInputStyle,
+    #[prop(default = EmailInputStyle::Underline)]
+    style: EmailInputStyle,
 ) -> impl IntoView {
-
     let is_invalid_change = create_rw_signal(false);
     let is_valid_change = create_rw_signal(false);
 
@@ -37,27 +38,32 @@ pub fn InputEmail(
     let id = move || id.clone();
 
     let label = move || "Email".to_string();
-    
+
     let error_message = create_rw_signal(String::new());
 
     let validate_change = move |email: &str| {
-        EmailInput{email: email.to_string()}.validate().is_ok()
+        EmailInput {
+            email: email.to_string(),
+        }
+        .validate()
+        .is_ok()
     };
 
-
-    let _ = watch(move || email.get(),
-          move |email, _, _| {
-              if required && email.is_empty() {
-                  error_message.update(|v| *v = String::from("This field is required"));
-              }else if !validate_change(&email) {
-                  error_message.update(|v| *v = String::from("Please enter a valid email address."));
-                  is_valid_change.update(|v| *v = false);
-                  is_invalid_change.update(|v| *v = true);
-              }else{
-                  is_valid_change.update(|v| *v = true);
-                  is_invalid_change.update(|v| *v = false);
-              }
-          }, false
+    let _ = watch(
+        move || email.get(),
+        move |email, _, _| {
+            if required && email.is_empty() {
+                error_message.update(|v| *v = String::from("This field is required"));
+            } else if !validate_change(&email) {
+                error_message.update(|v| *v = String::from("Please enter a valid email address."));
+                is_valid_change.update(|v| *v = false);
+                is_invalid_change.update(|v| *v = true);
+            } else {
+                is_valid_change.update(|v| *v = true);
+                is_invalid_change.update(|v| *v = false);
+            }
+        },
+        false,
     );
 
     view! {
@@ -91,8 +97,8 @@ pub fn InputEmail(
                     }
                 }
             />
-            <label 
-                for=id() 
+            <label
+                for=id()
                 class="input-label"
                 class:outline = style == EmailInputStyle::Outline || style == EmailInputStyle::Rounded
                 class:underline = style == EmailInputStyle::Underline

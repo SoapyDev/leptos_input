@@ -1,17 +1,17 @@
-use leptos::*;
 use leptos::MaybeSignal;
+use leptos::*;
 use uuid::Uuid;
 
 #[derive(PartialEq, Clone, Copy)]
 pub enum PasswordInputStyle {
     Underline,
     Outline,
-    Rounded
+    Rounded,
 }
 
 /// The level of validation for the password
 #[derive(Clone)]
-pub enum PasswordValidationLevel{
+pub enum PasswordValidationLevel {
     /// The password must be at least 8 characters long, and contain at least one lowercase letter, one uppercase letter.
     Weak,
     /// The password must be at least 8 characters long, and contain at least one lowercase letter, one uppercase letter, one number and one special character [ !\"'@#$%^&-_=+/?.,:;`&^|* ].
@@ -22,20 +22,21 @@ pub enum PasswordValidationLevel{
     Custom(fn(&str) -> bool, String),
 }
 
-impl PasswordValidationLevel{
-    const SPECIAL_CHARACTERS: [&'static str; 23] = ["!", "'", "\"", "@", "#", "$", "%", "-", "_", "~", "+", "=", "?", ",", ".", "/", ":", ";", "`", "&", "^", "|", "*"];
-    fn validate(&self, val: &str) -> bool{
+impl PasswordValidationLevel {
+    const SPECIAL_CHARACTERS: [&'static str; 23] = [
+        "!", "'", "\"", "@", "#", "$", "%", "-", "_", "~", "+", "=", "?", ",", ".", "/", ":", ";",
+        "`", "&", "^", "|", "*",
+    ];
+    fn validate(&self, val: &str) -> bool {
         match self {
             PasswordValidationLevel::Weak => Self::password_is_week(val, 8),
             PasswordValidationLevel::Medium => Self::password_is_medium(val, 8),
             PasswordValidationLevel::Strong => Self::password_is_strong(val, 12),
-            PasswordValidationLevel::Custom(func, _) => {
-                func(val)
-            }
+            PasswordValidationLevel::Custom(func, _) => func(val),
         }
     }
-    
-    fn display_message(&self) -> String{
+
+    fn display_message(&self) -> String {
         match self {
             PasswordValidationLevel::Weak => String::from("The password must be at least 8 characters long, and contain at least one lowercase letter, one uppercase letter."),
             PasswordValidationLevel::Medium => String::from("The password must be at least 8 characters long, and contain at least one lowercase letter, one uppercase letter, one number and one special character [ !\"'@#$%^&-_=+/?.,:;`&^|* ]."),
@@ -43,62 +44,61 @@ impl PasswordValidationLevel{
             PasswordValidationLevel::Custom(_, message) => message.clone(),
         }
     }
-    
-    fn password_is_week(val: &str, len: usize) -> bool{
-        if !Self::is_minmal_len_or_more(val, len){
-            return false
-        }else if !Self::contains_lowercase(val){
-            return false
-        } else if !Self::contains_uppercase(val){
-            return false
+
+    fn password_is_week(val: &str, len: usize) -> bool {
+        if !Self::is_minmal_len_or_more(val, len) {
+            return false;
+        } else if !Self::contains_lowercase(val) {
+            return false;
+        } else if !Self::contains_uppercase(val) {
+            return false;
         }
 
         true
     }
-    
-    fn password_is_medium(val: &str, len: usize) -> bool{
-        if !Self::password_is_week(val, len){
-            return false
-        }else if !Self::contains_number(val){
-            return false
-        } else if !Self::contains_special_character(val){
-            return false
+
+    fn password_is_medium(val: &str, len: usize) -> bool {
+        if !Self::password_is_week(val, len) {
+            return false;
+        } else if !Self::contains_number(val) {
+            return false;
+        } else if !Self::contains_special_character(val) {
+            return false;
         }
-        
+
         true
     }
-    
-    fn password_is_strong(val: &str, len: usize) -> bool{
-        if !Self::password_is_medium(val, len){
-            return false
+
+    fn password_is_strong(val: &str, len: usize) -> bool {
+        if !Self::password_is_medium(val, len) {
+            return false;
         }
-        
+
         true
     }
-    fn is_minmal_len_or_more(val: &str, len: usize) -> bool{
+    fn is_minmal_len_or_more(val: &str, len: usize) -> bool {
         if val.len() < len {
-            return false
+            return false;
         }
         true
     }
-    
-    fn contains_lowercase(val: &str) -> bool{
+
+    fn contains_lowercase(val: &str) -> bool {
         val.chars().any(|c| c.is_lowercase())
     }
-    
-    fn contains_uppercase(val: &str) -> bool{
+
+    fn contains_uppercase(val: &str) -> bool {
         val.chars().any(|c| c.is_uppercase())
     }
-    
-    fn contains_number(val: &str) -> bool{
+
+    fn contains_number(val: &str) -> bool {
         val.chars().any(|c| c.is_numeric())
     }
-    
-    fn contains_special_character(val: &str) -> bool{
+
+    fn contains_special_character(val: &str) -> bool {
         Self::SPECIAL_CHARACTERS.iter().any(|c| val.contains(c))
     }
 }
-
 
 /// A password input that will validate the password based on a given validation function
 #[component]
@@ -106,17 +106,21 @@ pub fn InputPassword(
     /// The tracked value
     password: RwSignal<String>,
     /// Whether or not the input is required, defaults to `true`
-    #[prop(default = true)] required: bool,
+    #[prop(default = true)]
+    required: bool,
     /// Whether or not the input is disabled, defaults to `false`
-    #[prop(default = MaybeSignal::from(false))] disabled: MaybeSignal<bool>,
+    #[prop(default = MaybeSignal::from(false))]
+    disabled: MaybeSignal<bool>,
     /// The style of the input
-    #[prop(default = PasswordInputStyle::Underline)] style: PasswordInputStyle,
+    #[prop(default = PasswordInputStyle::Underline)]
+    style: PasswordInputStyle,
     /// The validation function
-    #[prop(default = PasswordValidationLevel::Strong)] validate_change: PasswordValidationLevel, 
+    #[prop(default = PasswordValidationLevel::Strong)]
+    validate_change: PasswordValidationLevel,
     /// Label for the input, defaults to `Password`
-    #[prop(default = MaybeSignal::from(String::from("Password")))] label: MaybeSignal<String>,
+    #[prop(default = MaybeSignal::from(String::from("Password")))]
+    label: MaybeSignal<String>,
 ) -> impl IntoView {
-
     let is_invalid_change = create_rw_signal(false);
     let is_valid_change = create_rw_signal(false);
 
@@ -129,21 +133,22 @@ pub fn InputPassword(
     let error_message = create_rw_signal(String::new());
 
     let validator = validate_change.clone();
-    let _ = watch(move || (password.get()),
-          move |password, _, _| {
-              if required && password.is_empty() {
-                  error_message.update(|v| *v = String::from("This field is required"));
-              }else if !validator.validate(&password) {
-                  error_message.update(|v| *v = validator.display_message());
-                  is_valid_change.update(|v| *v = false);
-                  is_invalid_change.update(|v| *v = true);
-              }else{
-                  is_valid_change.update(|v| *v = true);
-                  is_invalid_change.update(|v| *v = false);
-              }
-          }, false
+    let _ = watch(
+        move || (password.get()),
+        move |password, _, _| {
+            if required && password.is_empty() {
+                error_message.update(|v| *v = String::from("This field is required"));
+            } else if !validator.validate(&password) {
+                error_message.update(|v| *v = validator.display_message());
+                is_valid_change.update(|v| *v = false);
+                is_invalid_change.update(|v| *v = true);
+            } else {
+                is_valid_change.update(|v| *v = true);
+                is_invalid_change.update(|v| *v = false);
+            }
+        },
+        false,
     );
-
 
     view! {
         <div class="input-group">
@@ -176,8 +181,8 @@ pub fn InputPassword(
                     }
                 }
             />
-            <label 
-                for=id() 
+            <label
+                for=id()
                 class="input-label"
                 class:outline = style == PasswordInputStyle::Outline || style == PasswordInputStyle::Rounded
                 class:underline = style == PasswordInputStyle::Underline

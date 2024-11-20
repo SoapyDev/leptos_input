@@ -4,32 +4,31 @@ use leptos::{component, provide_context, use_context, SignalSet, SignalUpdate};
 use leptos::{view, Children, IntoView, RwSignal, SignalGet};
 use leptos_use::{use_cookie, use_css_var};
 use std::fmt::{Display, Formatter};
-use leptos::leptos_dom::logging::console_log;
 
 /// The selected theme of the application.
-#[derive(Clone, Debug, Copy,PartialEq)]
-pub enum Theme{
+#[derive(Clone, Debug, Copy, PartialEq)]
+pub enum Theme {
     Light,
-    Dark
+    Dark,
 }
 
-impl Display for Theme{
+impl Display for Theme {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Theme::Light => write!(f, "light"),
-            Theme::Dark => write!(f, "dark")
+            Theme::Dark => write!(f, "dark"),
         }
     }
 }
-impl Default for Theme{
+impl Default for Theme {
     fn default() -> Self {
         let (cookie, _) = leptos_use::use_cookie::<String, FromToStringCodec>("theme_mode");
 
-        if cookie.get().is_some(){
+        if cookie.get().is_some() {
             if cookie.get().unwrap() == "dark" {
-                return Theme::Dark
+                return Theme::Dark;
             }
-            return Theme::Light
+            return Theme::Light;
         }
         Theme::Dark
     }
@@ -37,84 +36,81 @@ impl Default for Theme{
 /// For any given variable, a light and dark color must be
 /// specified. The color will be selected based on the theme.
 #[derive(Clone, Debug, PartialEq)]
-pub struct ThemeColor{
+pub struct ThemeColor {
     /// The value for the light theme. Can be any valid CSS color value.
     /// For example: "#fff", "rgb(255, 255, 255)", "hsl(0, 0%, 100%)"
     /// or transparent.
     pub light: Color,
-    pub dark: Color
+    pub dark: Color,
 }
 
-impl ThemeColor{
-    pub fn hex(&self, theme: &Theme) -> String{
+impl ThemeColor {
+    pub fn hex(&self, theme: &Theme) -> String {
         match theme {
             Theme::Light => self.light.to_hex_string(),
-            Theme::Dark => self.dark.to_hex_string()
+            Theme::Dark => self.dark.to_hex_string(),
         }
     }
 
-    pub fn rgb(&self, theme: &Theme) -> String{
+    pub fn rgb(&self, theme: &Theme) -> String {
         match theme {
             Theme::Light => self.light.to_rgb_string(),
-            Theme::Dark => self.dark.to_rgb_string()
+            Theme::Dark => self.dark.to_rgb_string(),
         }
     }
 
-    pub fn hsla(&self, theme: &Theme) -> [f32; 4]{
+    pub fn hsla(&self, theme: &Theme) -> [f32; 4] {
         match theme {
-             Theme::Light => self.light.to_hsla(),
-             Theme::Dark => self.dark.to_hsla()
+            Theme::Light => self.light.to_hsla(),
+            Theme::Dark => self.dark.to_hsla(),
         }
     }
 
-    pub fn lighten(&self, theme: &Theme, amount: f32) -> String{
+    pub fn lighten(&self, theme: &Theme, amount: f32) -> String {
         let base = self.hsla(theme);
 
-        Color::from_hsla(base[0], base[1], base[2] + amount, base[3])
-            .to_hex_string()
+        Color::from_hsla(base[0], base[1], base[2] + amount, base[3]).to_hex_string()
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
-pub struct Shadow{
+pub struct Shadow {
     pub light: String,
-    pub dark: String
+    pub dark: String,
 }
 
-impl Shadow{
-    pub fn shadow(&self, theme: &Theme) -> String{
+impl Shadow {
+    pub fn shadow(&self, theme: &Theme) -> String {
         match theme {
             Theme::Light => self.light.clone(),
-            Theme::Dark => self.dark.clone()
+            Theme::Dark => self.dark.clone(),
         }
     }
 }
 
 /// A distance or size value.
 #[derive(Clone, Debug, PartialEq)]
-pub struct Sizes{
+pub struct Sizes {
     pub value: f64,
-    pub unit : String
+    pub unit: String,
 }
 
-impl Display for Sizes{
+impl Display for Sizes {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-
         write!(f, "{}{};", self.value, self.unit)
     }
 }
 
-impl Default for Sizes{
+impl Default for Sizes {
     fn default() -> Self {
-        Sizes{
+        Sizes {
             value: 1.0,
-            unit: String::from("px")
+            unit: String::from("px"),
         }
     }
 }
 
-
 #[derive(Clone, Debug, PartialEq)]
-pub struct BreakPoints{
+pub struct BreakPoints {
     pub small_form: Sizes,
     pub mobile: Sizes,
     pub tablet: Sizes,
@@ -126,73 +122,73 @@ impl Default for BreakPoints {
         BreakPoints {
             small_form: Sizes {
                 value: 400.0,
-                unit: String::from("px")
+                unit: String::from("px"),
             },
             mobile: Sizes {
                 value: 600.0,
-                unit: String::from("px")
+                unit: String::from("px"),
             },
             tablet: Sizes {
                 value: 900.0,
-                unit: String::from("px")
+                unit: String::from("px"),
             },
             desktop: Sizes {
                 value: 1200.0,
-                unit: String::from("px")
+                unit: String::from("px"),
             },
         }
     }
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct Radius{
+pub struct Radius {
     pub input_radius: Sizes,
-    pub box_radius: Sizes
+    pub box_radius: Sizes,
 }
 
-impl Default for Radius{
+impl Default for Radius {
     fn default() -> Self {
-        Radius{
-            input_radius: Sizes{
+        Radius {
+            input_radius: Sizes {
                 value: 8.0,
-                unit: String::from("px")
+                unit: String::from("px"),
             },
-            box_radius: Sizes{
+            box_radius: Sizes {
                 value: 16.0,
-                unit: String::from("px")
-            }
+                unit: String::from("px"),
+            },
         }
     }
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct Spacing{
+pub struct Spacing {
     small: Sizes,
     medium: Sizes,
-    large: Sizes
+    large: Sizes,
 }
 
-impl Default for Spacing{
+impl Default for Spacing {
     fn default() -> Self {
-        Spacing{
-            small: Sizes{
+        Spacing {
+            small: Sizes {
                 value: 1.0,
-                unit: String::from("rem")
+                unit: String::from("rem"),
             },
-            medium: Sizes{
+            medium: Sizes {
                 value: 2.0,
-                unit: String::from("rem")
+                unit: String::from("rem"),
             },
-            large: Sizes{
+            large: Sizes {
                 value: 4.0,
-                unit: String::from("rem")
-            }
+                unit: String::from("rem"),
+            },
         }
     }
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct Fonts{
+pub struct Fonts {
     pub family: String,
     pub small: Sizes,
     pub medium: Sizes,
@@ -200,31 +196,29 @@ pub struct Fonts{
     pub very_large: Sizes,
 }
 
-impl Default for Fonts{
+impl Default for Fonts {
     fn default() -> Self {
-        Fonts{
+        Fonts {
             family: String::from("Roboto, Inter, Helvetica, sans-serif, serif"),
-            small: Sizes{
+            small: Sizes {
                 value: 0.8,
-                unit: String::from("rem")
+                unit: String::from("rem"),
             },
-            medium: Sizes{
+            medium: Sizes {
                 value: 1.0,
-                unit: String::from("rem")
+                unit: String::from("rem"),
             },
-            large: Sizes{
+            large: Sizes {
                 value: 1.5,
-                unit: String::from("rem")
+                unit: String::from("rem"),
             },
-            very_large: Sizes{
+            very_large: Sizes {
                 value: 2.5,
-                unit: String::from("rem")
-            }
+                unit: String::from("rem"),
+            },
         }
-
     }
 }
-
 
 /// The theme of the application. One of Light or Dark with
 /// the associated colors.
@@ -257,72 +251,71 @@ pub struct GlobalTheme {
     pub breakpoints: BreakPoints,
 }
 
-impl Default for GlobalTheme{
+impl Default for GlobalTheme {
     fn default() -> Self {
-        GlobalTheme{
+        GlobalTheme {
             theme: Theme::default(),
-            white: ThemeColor{
+            white: ThemeColor {
                 light: "#E1E1E1".parse().unwrap(),
-                dark: "#E1E1E1".parse().unwrap()
+                dark: "#E1E1E1".parse().unwrap(),
             },
-            black: ThemeColor{
+            black: ThemeColor {
                 light: "#121212".parse().unwrap(),
-                dark: "#121212".parse().unwrap()
+                dark: "#121212".parse().unwrap(),
             },
-            gray: ThemeColor{
+            gray: ThemeColor {
                 light: "#B1B1B1".parse().unwrap(),
-                dark: "#B1B1B1".parse().unwrap()
+                dark: "#B1B1B1".parse().unwrap(),
             },
-            text: ThemeColor{
+            text: ThemeColor {
                 light: "#121212".parse().unwrap(),
-                dark: "#E1E1E1".parse().unwrap()
+                dark: "#E1E1E1".parse().unwrap(),
             },
-            text_hover: ThemeColor{
+            text_hover: ThemeColor {
                 light: "#E1E1E1".parse().unwrap(),
-                dark: "#121212".parse().unwrap()
+                dark: "#121212".parse().unwrap(),
             },
-            background: ThemeColor{
+            background: ThemeColor {
                 light: "#D1D1D1".parse().unwrap(),
-                dark: "#181818".parse().unwrap()
+                dark: "#181818".parse().unwrap(),
             },
-            emphasis: ThemeColor{
+            emphasis: ThemeColor {
                 light: "#9457e1".parse().unwrap(),
-                dark: "#8544d9".parse().unwrap()
+                dark: "#8544d9".parse().unwrap(),
             },
-            secondary: ThemeColor{
+            secondary: ThemeColor {
                 light: "#15b6a6".parse().unwrap(),
-                dark: "#03DAC5".parse().unwrap()
+                dark: "#03DAC5".parse().unwrap(),
             },
-            shadow_small: Shadow{
+            shadow_small: Shadow {
                 light: String::from("rgba(17, 17, 26, 0.1) 0px 4px 12px, rgba(17, 17, 26, 0.05) 0px 8px 24px"),
-                dark: String::from("rgba(248, 248, 229, 0.1) 0px 4px 12px, rgba(248, 248, 229, 0.05) 0px 8px 24px")
+                dark: String::from("rgba(248, 248, 229, 0.1) 0px 4px 12px, rgba(248, 248, 229, 0.05) 0px 8px 24px"),
             },
-            shadow_medium: Shadow{
+            shadow_medium: Shadow {
                 light: String::from("rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px"),
-                dark: String::from("rgba(248, 248, 229, 0.1) 0px 1px 0px, rgba(248, 248, 229, 0.1) 0px 8px 24px, rgba(248, 248, 229, 0.1) 0px 16px 48px")
+                dark: String::from("rgba(248, 248, 229, 0.1) 0px 1px 0px, rgba(248, 248, 229, 0.1) 0px 8px 24px, rgba(248, 248, 229, 0.1) 0px 16px 48px"),
             },
-            shadow_large: Shadow{
+            shadow_large: Shadow {
                 light: String::from("rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px)"),
-                dark: String::from("rgba(248, 248, 229, 0.1) 0px 4px 16px, rgba(248, 248, 229, 0.1) 0px 8px 24px, rgba(248, 248, 229, 0.1) 0px 16px 56px")
+                dark: String::from("rgba(248, 248, 229, 0.1) 0px 4px 16px, rgba(248, 248, 229, 0.1) 0px 8px 24px, rgba(248, 248, 229, 0.1) 0px 16px 56px"),
             },
-            shadow_x_large: Shadow{
+            shadow_x_large: Shadow {
                 light: String::from("rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px"),
-                dark: String::from("rgba(248, 248, 229, 0.1) 0px 8px 24px, rgba(248, 248, 229, 0.1) 0px 16px 56px, rgba(248, 248, 229, 0.1) 0px 24px 80px")
+                dark: String::from("rgba(248, 248, 229, 0.1) 0px 8px 24px, rgba(248, 248, 229, 0.1) 0px 16px 56px, rgba(248, 248, 229, 0.1) 0px 24px 80px"),
             },
-            success: ThemeColor{
+            success: ThemeColor {
                 light: "#4caf50".parse().unwrap(),
-                dark: "#4caf50".parse().unwrap()
+                dark: "#4caf50".parse().unwrap(),
             },
-            error: ThemeColor{
+            error: ThemeColor {
                 light: "#c94444".parse().unwrap(),
-                dark: "#c94444".parse().unwrap()
+                dark: "#c94444".parse().unwrap(),
             },
             fonts: Fonts::default(),
             spacing: Spacing::default(),
             radius: Radius::default(),
             breakpoints: BreakPoints::default(),
         }
-
     }
 }
 
@@ -376,7 +369,6 @@ impl GlobalTheme {
         let (_, set_breakpoint_large) = use_css_var("--breakpoint-tablet");
         let (_, set_breakpoint_x_large) = use_css_var("--breakpoint-desktop");
 
-
         let theme = self.theme;
 
         set_white.set(self.white.hex(&theme));
@@ -417,8 +409,6 @@ impl GlobalTheme {
             set_secondary_hover.set(self.secondary.lighten(&theme, 0.1));
         }
 
-
-
         set_shadow_small.set(self.shadow_small.shadow(&theme));
         set_shadow_medium.set(self.shadow_medium.shadow(&theme));
         set_shadow_large.set(self.shadow_large.shadow(&theme));
@@ -444,14 +434,12 @@ impl GlobalTheme {
         set_breakpoint_medium.set(self.breakpoints.mobile.to_string());
         set_breakpoint_large.set(self.breakpoints.tablet.to_string());
         set_breakpoint_x_large.set(self.breakpoints.desktop.to_string());
-
-
     }
 
     pub fn toggle(&mut self) {
         let new_theme = match self.theme {
             Theme::Light => Theme::Dark,
-            Theme::Dark => Theme::Light
+            Theme::Dark => Theme::Light,
         };
 
         let (_, set_theme) = use_cookie::<String, FromToStringCodec>("theme_mode");
@@ -461,7 +449,6 @@ impl GlobalTheme {
         self.theme = new_theme;
         self.apply();
     }
-
 }
 
 #[component]
@@ -469,7 +456,7 @@ pub fn ThemeToggler() -> impl IntoView {
     let global_theme = use_context::<RwSignal<GlobalTheme>>().unwrap();
 
     // https://codepen.io/ghaste/pen/WNOjQJN
-    view!{
+    view! {
         <button
         on:click=move |_| global_theme.update(|t| t.toggle())
         id="switch-theme" aria-label="Switch theme">
@@ -490,7 +477,6 @@ pub fn GlobalThemeProvider(
     #[prop(default = RwSignal::new(GlobalTheme::default()))] global_theme: RwSignal<GlobalTheme>,
     children: Children,
 ) -> impl IntoView {
-
     global_theme.get().apply();
     provide_context(global_theme);
 

@@ -11,17 +11,17 @@ repository = "https://github.com/SoapyDev/leptos_inputs"
 rust-version.workspace = true
 
 [dependencies]
-leptos = {workspace = true}
-leptos_meta = {workspace = true}
-leptos_router = {workspace = true}
+leptos = { workspace = true }
+leptos_meta = { workspace = true }
+leptos_router = { workspace = true }
 web-sys = "0.3"
 wasm-bindgen = "0.2"
 cfg-if = "1.0.0"
 chrono = "0.4"
-uuid = { version = "1.10", features = ["v4", "fast-rng"]}
+uuid = { version = "1.10", features = ["v4", "fast-rng"] }
 validator = { version = "0.18.1", features = ["derive"] }
 leptos-use = { version = "0.13", features = ["use_css_var"] }
-leptos_icons = { version = "0.3.1", default-features = false}
+leptos_icons = { version = "0.3.1", default-features = false }
 icondata = { version = "0.4.0", default-features = false }
 csscolorparser = { version = "0.7.0", default-features = false }
 codee = { version = "0.2.0" }

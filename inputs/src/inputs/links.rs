@@ -7,7 +7,7 @@ pub enum LinkStyle {
     Underline,
     Outline,
     Rounded,
-    Text
+    Text,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -16,24 +16,22 @@ pub enum LinkColor {
     Secondary,
     Error,
     Success,
-    Text
+    Text,
 }
-
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum LinkSize {
     Small,
     Medium,
-    Large
+    Large,
 }
-
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum LinkAnimation {
     Fill,
     Push,
     Float,
-    None
+    None,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -54,15 +52,18 @@ pub fn Link(
     #[prop(into)] text: MaybeSignal<String>,
     #[prop(default = None)] icon: Option<Icon>,
 ) -> impl IntoView {
-    
-    let target= match target {
+    let target = match target {
         LinkTarget::_Blank => "_blank",
         LinkTarget::_Self => "_self",
         LinkTarget::_Parent => "_parent",
         LinkTarget::_Top => "_top",
     };
-    
-    let rel = if target == "_blank" { "noopener noreferrer" } else { "none" };
+
+    let rel = if target == "_blank" {
+        "noopener noreferrer"
+    } else {
+        "none"
+    };
 
     view! {
         <a

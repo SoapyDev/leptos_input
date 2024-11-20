@@ -1,44 +1,51 @@
+use leptos::create_rw_signal;
+use leptos::SignalGet;
+use leptos::{component, view, IntoView, MaybeSignal, RwSignal};
+use leptos::{create_signal, For};
 use leptos::{event_target_value, watch, ReadSignal};
 use leptos::{SignalSet, SignalUpdate};
-use leptos::{create_signal, For};
-use leptos::SignalGet;
-use uuid::Uuid;
-use leptos::create_rw_signal;
-use leptos::{component, view, IntoView, MaybeSignal, RwSignal};
 use leptos_use::use_css_var;
+use uuid::Uuid;
 #[derive(PartialEq)]
 pub enum AddressInputStyle {
     Underline,
     Outline,
     Search,
-    Rounded
+    Rounded,
 }
 #[component]
 pub fn InputAddress(
     /// The tracked value
-    #[prop(into)] address: RwSignal<String>,
+    #[prop(into)]
+    address: RwSignal<String>,
     /// The label of the input, defaults to `Address`
-    #[prop(into, default = MaybeSignal::from(String::from("Address")))] label: MaybeSignal<String>,
+    #[prop(into, default = MaybeSignal::from(String::from("Address")))]
+    label: MaybeSignal<String>,
     /// Whether or not the input is required, defaults to `false`
-    #[prop(default = false)] required: bool,
+    #[prop(default = false)]
+    required: bool,
     /// Whether or not the input is disabled, defaults to `false`
-    #[prop(default = MaybeSignal::from(false))] disabled: MaybeSignal<bool>,
+    #[prop(default = MaybeSignal::from(false))]
+    disabled: MaybeSignal<bool>,
     /// The style of the input
-    #[prop(default = AddressInputStyle::Underline)] style: AddressInputStyle,
+    #[prop(default = AddressInputStyle::Underline)]
+    style: AddressInputStyle,
     /// The suggestions of the input
-    #[prop(default = MaybeSignal::from(None))] suggestions: MaybeSignal<Option<Vec<String>>>
+    #[prop(default = MaybeSignal::from(None))]
+    suggestions: MaybeSignal<Option<Vec<String>>>,
 ) -> impl IntoView {
-
     let error_message = create_rw_signal(String::new());
-    
-    let _ = watch(move || address.get(), 
-          move |address, _, _| {
-              if required && address.is_empty() {
-                  error_message.update(|v| *v = String::from("This field is required"));
-              }
-          }, false
+
+    let _ = watch(
+        move || address.get(),
+        move |address, _, _| {
+            if required && address.is_empty() {
+                error_message.update(|v| *v = String::from("This field is required"));
+            }
+        },
+        false,
     );
-    
+
     let is_invalid_change = create_rw_signal(false);
     let is_valid_change = create_rw_signal(false);
 
@@ -47,13 +54,12 @@ pub fn InputAddress(
 
     let label = label.get();
     let label = move || label.clone();
-    
-    
+
     let selected = create_rw_signal(0usize);
-    
+
     let (suggestions, set_suggestions) = create_signal(suggestions.get());
-    
-    view!{
+
+    view! {
         <div class="input-group">
             <input
                 type="text"
@@ -98,8 +104,8 @@ pub fn InputAddress(
                     }
                 }
                 />
-            <label 
-                for=id() 
+            <label
+                for=id()
                 class="input-label"
                 class:outline = style == AddressInputStyle::Outline || style == AddressInputStyle::Rounded
                 class:search = style == AddressInputStyle::Search
@@ -120,52 +126,51 @@ fn Suggestions(
     value: RwSignal<String>,
     suggestions: ReadSignal<Option<Vec<String>>>,
     selected: RwSignal<usize>,
-    style : AddressInputStyle
+    style: AddressInputStyle,
 ) -> impl IntoView {
-        
-        view!{
+    view! {
 
-            {move || if suggestions.get().is_some() {
-                let len = suggestions.get().unwrap().len().min(5);
-                let (_list_len, set_list_len) = use_css_var("--list-size");
-                set_list_len.set(len.to_string());
-                
-                
-                view!{
-                    <div class="suggestions"
-                        class:rounded=style == AddressInputStyle::Rounded
-                    >
-                    <ul>
-                        <For
-                            each=move || suggestions.get().unwrap().into_iter().enumerate()
-                            key=|s| s.clone()
-                            children=move |(i, val)| {
-                        
-                            let suggestion = val.clone();
+        {move || if suggestions.get().is_some() {
+            let len = suggestions.get().unwrap().len().min(5);
+            let (_list_len, set_list_len) = use_css_var("--list-size");
+            set_list_len.set(len.to_string());
 
-                                view!{
 
-                                    <li class:selected=move || selected.get() == i>
-                                        <button
-                                            type="button"
-                                            class="suggestion"
-                                            on:click=move |_| {
-                                                value.set(suggestion.clone());
-                                                selected.set(i);
-                                            }
-                                            on:mouseenter=move |_| selected.set(i)
-                                        >
-                                            {val}
-                                        </button>
-                                    </li>
-                                }
+            view!{
+                <div class="suggestions"
+                    class:rounded=style == AddressInputStyle::Rounded
+                >
+                <ul>
+                    <For
+                        each=move || suggestions.get().unwrap().into_iter().enumerate()
+                        key=|s| s.clone()
+                        children=move |(i, val)| {
+
+                        let suggestion = val.clone();
+
+                            view!{
+
+                                <li class:selected=move || selected.get() == i>
+                                    <button
+                                        type="button"
+                                        class="suggestion"
+                                        on:click=move |_| {
+                                            value.set(suggestion.clone());
+                                            selected.set(i);
+                                        }
+                                        on:mouseenter=move |_| selected.set(i)
+                                    >
+                                        {val}
+                                    </button>
+                                </li>
                             }
-                        />
-                    </ul>
-                    </div>
-                }.into_view()
-            }else{
-                view!{}.into_view()
-            }}
-        }
+                        }
+                    />
+                </ul>
+                </div>
+            }.into_view()
+        }else{
+            view!{}.into_view()
+        }}
+    }
 }
