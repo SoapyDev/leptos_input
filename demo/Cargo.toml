@@ -9,7 +9,8 @@ leptos-inputs = { path = "../inputs" }
 leptos = { workspace = true }
 leptos_meta = { workspace = true }
 leptos_router = { workspace = true }
-icondata = { version = "0.4.0" }
+icondata = { version = "0.5.0" }
+leptos_icons = "0.3.1"
 chrono = "0.4"
 uuid = { version = "1.10", features = ["v4"] }
 
