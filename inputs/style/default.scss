@@ -1,0 +1,22 @@
+input, select, textarea, button, optgroup, form, label, a img, svg, p, span, ul, li {
+  box-sizing: border-box;
+  padding: var(--none);
+  margin: var(--none);
+  border: 1px solid transparent;
+  outline: none;
+  color: var(--text);
+  font-size: var(--font-size-medium);
+  background-color: transparent;
+}
+
+ul, li {
+  list-style-type: none;
+}
+
+textarea {
+  resize: vertical;
+}
+
+label {
+  color: var(--text);
+}
