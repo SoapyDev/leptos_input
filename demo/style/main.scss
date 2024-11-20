@@ -1,6 +1,6 @@
 @import "../../inputs/style/main.scss";
 
-body{
+body {
   width: 100%;
   max-width: 100dvw;
   min-height: 100dvh;
@@ -11,11 +11,11 @@ body{
   gap: 1rem;
 }
 
-nav{
+nav {
   width: 100%;
 }
 
-nav div{
+nav div {
   max-width: 1500px;
   display: flex;
   flex-flow: row nowrap;
@@ -26,6 +26,6 @@ nav div{
   margin: 0 auto;
 }
 
-nav h1{
+nav h1 {
   color: var(--text);
 }
