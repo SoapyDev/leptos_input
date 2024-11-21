@@ -1,4 +1,4 @@
-use crate::{DisplayStrategy, Line};
+use crate::{DisplayStrategy, Gap, Line};
 use leptos::{component, view, Children, ChildrenFn, IntoView, MaybeSignal, View};
 
 #[derive(PartialEq, Clone, Copy)]
@@ -69,7 +69,7 @@ pub fn Button(
             class:push=animation == ButtonAnimation::Push
             class:float=animation == ButtonAnimation::Float
         >
-            <Line justify=DisplayStrategy::Center align=DisplayStrategy::Center>
+            <Line justify=DisplayStrategy::Center align=DisplayStrategy::Center gap=Gap::None>
                 {content_before}
                 {text}
                 {content_after}
