@@ -29,9 +29,19 @@
 .form.simple-login {
   max-width: 800px;
   min-width: 400px;
-  padding: var(--spacing-large);
 }
 
+.form.padding-small{
+  padding: var(--spacing-small);
+}
+
+.form.padding-medium{
+  padding: var(--spacing-medium);
+}
+
+.form.padding-large{
+  padding: var(--spacing-large);
+}
 
 .column {
   display: flex;
