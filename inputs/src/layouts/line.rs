@@ -30,8 +30,8 @@ pub fn Line(
     #[prop(default = Direction::Row)] direction: Direction,
     #[prop(default = true)] wrap: bool,
     #[prop(default = Gap::Small)] gap: Gap,
-    #[prop(default = DisplayStrategy::Start)] justify: DisplayStrategy,
-    #[prop(default = DisplayStrategy::Start)] align: DisplayStrategy,
+    #[prop(default = DisplayStrategy::Center)] justify: DisplayStrategy,
+    #[prop(default = DisplayStrategy::Center)] align: DisplayStrategy,
     children: Children,
 ) -> impl IntoView {
     view! {
