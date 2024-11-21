@@ -10,7 +10,7 @@ mod text;
 pub use address::{AddressInputStyle, InputAddress};
 pub use buttons::{Button, ButtonAnimation, ButtonColor, ButtonRoundness, ButtonSize, ButtonStyle};
 pub use email::{EmailInputStyle, InputEmail};
-pub use form::{FormBox, FormBoxStyle};
+pub use form::{FormBox, FormBoxStyle, Padding};
 pub use global_theme::{GlobalTheme, GlobalThemeProvider, Theme, ThemeColor, ThemeToggler};
 pub use password::{InputPassword, PasswordInputStyle, PasswordValidationLevel};
 pub use text::{InputText, TextInputStyle};
