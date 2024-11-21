@@ -1,7 +1,6 @@
 use icondata::AiAlignRightOutlined;
 use leptos::*;
 use leptos_icons::Icon;
-use leptos_inputs::PasswordValidationLevel;
 use leptos_inputs::{AddressInputStyle, InputAddress};
 use leptos_inputs::{
     Button, ButtonAnimation, ButtonColor, ButtonRoundness, ButtonSize, ButtonStyle,
@@ -11,6 +10,7 @@ use leptos_inputs::{Direction, DisplayStrategy, Line};
 use leptos_inputs::{EmailInputStyle, InputEmail, InputText, TextInputStyle};
 use leptos_inputs::{FormBox, GlobalThemeProvider, ThemeToggler};
 use leptos_inputs::{Gap, GlobalTheme, InputPassword};
+use leptos_inputs::{Padding, PasswordValidationLevel, Popup};
 use leptos_meta::provide_meta_context;
 
 #[component]
@@ -46,32 +46,33 @@ pub fn App() -> impl IntoView {
                 </div>
             </nav>
 
-            <FormBox>
-                <form style="display: flex; flex-direction: column;gap: 1.5rem;">
-                    <InputText label=label_1.into() value=value required=true style=TextInputStyle::Outline/>
-                    <InputText label=label_2.into() value=value required=true style=TextInputStyle::Underline/>
-                    <InputText label=label_3.into() value=value required=true style=TextInputStyle::Rounded/>
+            <Popup title="Dialog demo" visible=true>
+                <FormBox padding=Padding::None>
+                    <form style="display: flex; flex-direction: column;gap: 1.5rem;">
+                        <InputText label=label_1.into() value=value required=true style=TextInputStyle::Outline/>
+                        <InputText label=label_2.into() value=value required=true style=TextInputStyle::Underline/>
+                        <InputText label=label_3.into() value=value required=true style=TextInputStyle::Rounded/>
 
-                    <InputEmail email=value style=EmailInputStyle::Outline/>
-                    <InputEmail email=value required=true style=EmailInputStyle::Underline/>
+                        <InputEmail email=value style=EmailInputStyle::Outline/>
+                        <InputEmail email=value required=true style=EmailInputStyle::Underline/>
 
 
-                    <InputPassword password=value validate_change=PasswordValidationLevel::Weak style=PasswordInputStyle::Outline/>
-                    <InputPassword password=value required=true validate_change=PasswordValidationLevel::Weak style=PasswordInputStyle::Underline/>
+                        <InputPassword password=value validate_change=PasswordValidationLevel::Weak style=PasswordInputStyle::Outline/>
+                        <InputPassword password=value required=true validate_change=PasswordValidationLevel::Weak style=PasswordInputStyle::Underline/>
 
-                    <InputPassword password=value validate_change=PasswordValidationLevel::Medium style=PasswordInputStyle::Outline/>
-                    <InputPassword password=value required=true validate_change=PasswordValidationLevel::Medium style=PasswordInputStyle::Underline/>
+                        <InputPassword password=value validate_change=PasswordValidationLevel::Medium style=PasswordInputStyle::Outline/>
+                        <InputPassword password=value required=true validate_change=PasswordValidationLevel::Medium style=PasswordInputStyle::Underline/>
 
-                    <InputPassword password=value validate_change=PasswordValidationLevel::Strong style=PasswordInputStyle::Outline/>
-                    <InputPassword password=value required=true validate_change=PasswordValidationLevel::Strong style=PasswordInputStyle::Underline/>
+                        <InputPassword password=value validate_change=PasswordValidationLevel::Strong style=PasswordInputStyle::Outline/>
+                        <InputPassword password=value required=true validate_change=PasswordValidationLevel::Strong style=PasswordInputStyle::Underline/>
 
-                    <InputPassword password=value validate_change=PasswordValidationLevel::Custom(custom_validation, custom_message.clone()) style=PasswordInputStyle::Outline/>
-                    <InputPassword password=value required=true validate_change=PasswordValidationLevel::Custom(custom_validation, custom_message) style=PasswordInputStyle::Underline/>
+                        <InputPassword password=value validate_change=PasswordValidationLevel::Custom(custom_validation, custom_message.clone()) style=PasswordInputStyle::Outline/>
+                        <InputPassword password=value required=true validate_change=PasswordValidationLevel::Custom(custom_validation, custom_message) style=PasswordInputStyle::Underline/>
 
-                    // <InputAddress address=value style=AddressInputStyle::Rounded suggestions=suggestions.into()/>
+                        <InputAddress address=value style=AddressInputStyle::Rounded suggestions=suggestions.into()/>
                 </form>
             </FormBox>
-
+            </Popup>
 
             <Line direction=Direction::Column justify=DisplayStrategy::Center gap=Gap::Medium>
                 <Line justify=DisplayStrategy::SpaceBetween>

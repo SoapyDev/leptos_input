@@ -20,3 +20,15 @@ textarea {
 label {
   color: var(--text);
 }
+
+dialog{
+  background-color: var(--dp-3);
+  z-index: 100;
+  width: fit-content;
+  border-color: transparent;
+
+}
+
+dialog[open]::backdrop{
+    background-color: var(--dp-0);
+}
