@@ -438,7 +438,7 @@ name = "demo"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "icondata 0.5.0",
+ "icondata",
  "leptos",
  "leptos-inputs",
  "leptos_icons",
@@ -741,15 +741,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f31827a206f56af32e590ba56d5d2d085f558508192593743f16b2306495269f"
 dependencies = [
  "cc",
-]
-
-[[package]]
-name = "icondata"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "18db9eec46b6c870bf84281dd8065fb207b23a9c1c0cb367c49a919a61a38dec"
-dependencies = [
- "icondata_core",
 ]
 
 [[package]]
@@ -1062,7 +1053,7 @@ dependencies = [
  "chrono",
  "codee",
  "csscolorparser",
- "icondata 0.4.0",
+ "icondata",
  "leptos",
  "leptos-use",
  "leptos_icons",
